@@ -2,7 +2,7 @@
 
 import websocket
 import thread
-import time, json
+import time, json, sys
 from constants import *
 from gamestate import GameState
 import utils
@@ -20,6 +20,18 @@ def on_message(ws, message):
     elif a == NEW_PLAYER:
         utils.parse_new_player(data=data, gs=gs)
         print "Added player : " + str(len(gs.players))
+    elif a == START_GAME:
+        print "START_GAME"
+        utils.parse_start_game(data=data, gs=gs)
+        print "Game has started !"
+    elif a == PLAYER_PLAYING:
+        player_id = utils.parse_player_playing(data=data,gs=gs)
+        print 'Player : ' + str(player_id) + ' is playing'
+    elif a == PLAY:
+        print 'Play'
+        
+    elif a == STOP_GAME:
+        print msg
     else:
         pass
 
@@ -37,6 +49,8 @@ def on_open(ws):
 
 if __name__ == "__main__":
     #websocket.enableTrace(True)
+    if len(sys.argv) > 1:
+        gs.set_name(sys.argv[0])
     ws = websocket.WebSocketApp("ws://localhost:8080",
                               on_message = on_message,
                               on_error = on_error,
