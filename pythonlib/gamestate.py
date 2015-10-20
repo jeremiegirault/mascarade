@@ -38,3 +38,6 @@ class GameState(object):
 
     def set_current_player(self, player_id):
         self.current_player = player_id
+
+    def set_announcing_turn_current_player(self, player_id):
+        self.announcing_turn_current_player = player_id

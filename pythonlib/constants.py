@@ -16,5 +16,8 @@ Actions
 PEEK = 'action:peek'
 SWITCH = 'action:switch'
 ANNOUNCE = 'action:announce'
-PASS = 'action:announce-pass'
+ANNOUNCE_PASS = 'action:announce-pass'
 ANNOUNCE_SAME = 'action:announce-same'
+ACTION_SUCCESS = 'action:success'
+
+ANNOUNCE_RESOLVE = 'announce-resolve'

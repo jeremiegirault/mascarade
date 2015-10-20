@@ -10,7 +10,10 @@ from dummy_bot import DummyBot
 
 gs = GameState() # initialize Game State
 bot = None
+
 def on_message(ws, message):
+    global bot
+    global gs
     msg = json.loads(message)
     a = msg.get('action',None)
     data = msg.get('data', None)
@@ -32,6 +35,14 @@ def on_message(ws, message):
     elif a == PLAY:
         print 'Play'
         bot.play()
+    elif a == ANNOUNCE:
+        print "Annoucement made by another player"
+        utils.parse_announce(data=data, gs=gs) # game state switch to announcing mode
+        bot.handle_announcement(data=data)
+    elif a == ANNOUNCE_RESOLVE:  # Resolving the announcing turn
+        utils.parse_announce_resolution(data=data, gs=gs)
+    elif a == ACTION_SUCCESS:  # Display the type of action that succeeded.
+        utils.parse_action_success(data=data, gs=gs)
 
     elif a == STOP_GAME:
         print msg
@@ -46,7 +57,7 @@ def on_close(ws):
 
 def on_open(ws):
     def run(*args):
-        ws.send("lol")
+        print ""
 
     thread.start_new_thread(run, ())
 

@@ -49,3 +49,36 @@ def parse_player_playing(data, gs):
     player_id = data.get('id')
     gs.set_current_player(player_id=player_id)
     return player_id
+
+def parse_announce(data, gs):
+    '''
+    {u'action': u'action:announce', u'data': {u'role': u'role:king', u'from': 1}}
+    '''
+    player_id = data.get('from')
+    gs.set_announcing_turn_current_player(player_id=player_id)
+    return player_id
+
+def parse_action_success(data, gs):
+    type = data.get('type')
+    if type == ANNOUNCE_PASS:  # The bot successfully passed
+        print 'You successfully passed your turn'
+    elif type == ANNOUNCE_SAME :
+        role = data.get('role')
+        print 'You announced the same role : ' + str(role)
+
+def parse_announce_resolution(data, gs):
+    '''
+    Resolution of the announcing turn. We should update the game state accordingly to the participants of the announcement.
+    '''
+    same_players = data.get('announcing-players')
+    other_players = data.get('other-players')
+
+    for same_player in same_players:  # Updating game state accordingly.
+        gs.update_player(id=str(same_player.get('id')), \
+        coins=same_player.get('coins'), role=same_player.get('role'), \
+        name=same_player.get('name'))
+
+    for other_player in other_players:  # Updating game state accordingly.
+        gs.update_player(id=str(other_player.get('id')), \
+        coins=other_player.get('coins'), role=other_player.get('role'), \
+        name=other_player.get('name'))
