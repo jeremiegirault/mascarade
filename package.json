@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "async": "^1.4.2",
     "ws": "^0.8.0"
   },
   "devDependencies": {},
