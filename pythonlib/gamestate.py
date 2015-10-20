@@ -37,4 +37,4 @@ class GameState(object):
         self.client_name = name
 
     def set_current_player(self, player_id):
-        self.current_player = player_id 
+        self.current_player = player_id

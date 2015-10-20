@@ -6,9 +6,10 @@ import time, json, sys
 from constants import *
 from gamestate import GameState
 import utils
+from dummy_bot import DummyBot
 
 gs = GameState() # initialize Game State
-
+bot = None
 def on_message(ws, message):
     msg = json.loads(message)
     a = msg.get('action',None)
@@ -23,13 +24,15 @@ def on_message(ws, message):
     elif a == START_GAME:
         print "START_GAME"
         utils.parse_start_game(data=data, gs=gs)
+        bot = DummyBot(ws=ws, gs=gs)
         print "Game has started !"
     elif a == PLAYER_PLAYING:
         player_id = utils.parse_player_playing(data=data,gs=gs)
         print 'Player : ' + str(player_id) + ' is playing'
     elif a == PLAY:
         print 'Play'
-        
+        bot.play()
+
     elif a == STOP_GAME:
         print msg
     else:
