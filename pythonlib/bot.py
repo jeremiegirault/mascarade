@@ -4,15 +4,30 @@ from constants import *
 
 class Bot:
     __metaclass__ = ABCMeta
-
     def __init__(self, ws, gs):
         self.ws = ws
         self.gs = gs
         print "[BOT] I have the id : " + str(gs.client_id)
 
     @abstractmethod
-    def play(self):
+    def play_normal_mode(self):
         pass
+
+    @abstractmethod
+    def play_announcing_mode(self):
+        pass
+
+    def play(self):
+        """
+        According to game state
+        """
+        if self.gs.announcing_turn_current_player:  # The game is in announcing mode
+            print "[BOT] ANNOUNCING MODE"
+            self.play_announcing_mode()
+        else:
+            print "[BOT] NORMAL MODE"
+            self.play_normal_mode()
+
 
     def peek(self):
         payload = {
@@ -20,7 +35,7 @@ class Bot:
             "data": {}
         }
         raw_payload = json.dumps(payload)
-        print ("I'm about to peek", raw_payload)
+        print ("[BOT] I'm about to peek", raw_payload)
         self.ws.send(raw_payload)
 
     def switch(self, player_id, swapping):
@@ -38,7 +53,7 @@ class Bot:
             "data": {"role": role}
         }
         raw_payload = json.dumps(payload)
-        print ("I'm about to announce", raw_payload)
+        print ("[BOT] I will announce", raw_payload)
         self.ws.send(raw_payload)
 
     def announce_same(self, data):
@@ -71,7 +86,7 @@ class Bot:
             print "[BOT][ERROR] The bot made an annoucement, when the game state was not in annoucement mode. "
 
 
-    def handle_announcement(self, data, announce_same):
+    def handle_announcement(self, data, announce_same=True):
         if announce_same: # we are announcing the same
             self.announce_same(data)
         else:  # we are passing

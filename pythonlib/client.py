@@ -20,26 +20,26 @@ def on_message(ws, message):
 
     if a == WELCOME: # {"action":"welcome","data":{"id":4,"competitors":[1]}}
         utils.parse_welcome(data=data, gs=gs)
-        print "Added players : " + str(len(gs.players))
+        print "[OTHER] Added players : " + str(len(gs.players))
     elif a == NEW_PLAYER:
         utils.parse_new_player(data=data, gs=gs)
-        print "Added player : " + str(len(gs.players))
+        print "[OTHER] Added player : " + str(len(gs.players))
     elif a == START_GAME:
-        print "START_GAME"
+        print "[ALL] START_GAME"
         utils.parse_start_game(data=data, gs=gs)
         bot = DummyBot(ws=ws, gs=gs)
-        print "Game has started !"
     elif a == PLAYER_PLAYING:
         player_id = utils.parse_player_playing(data=data,gs=gs)
-        print 'Player : ' + str(player_id) + ' is playing'
+        print '[OTHER] Player : ' + str(player_id) + ' is playing'
     elif a == PLAY:
-        print 'Play'
+        print '[BOT] My turn !'
         bot.play()
     elif a == ANNOUNCE:
-        print "Annoucement made by another player"
+        print '[OTHER] Announcement'
         utils.parse_announce(data=data, gs=gs) # game state switch to announcing mode
-        bot.handle_announcement(data=data)
+        #bot.handle_announcement(data=data)
     elif a == ANNOUNCE_RESOLVE:  # Resolving the announcing turn
+        print 'RESOLUTION'
         utils.parse_announce_resolution(data=data, gs=gs)
     elif a == ACTION_SUCCESS:  # Display the type of action that succeeded.
         utils.parse_action_success(data=data, gs=gs)

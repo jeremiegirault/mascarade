@@ -41,3 +41,6 @@ class GameState(object):
 
     def set_announcing_turn_current_player(self, player_id):
         self.announcing_turn_current_player = player_id
+
+    def clear_announcing_turn_current_player(self):
+        self.announcing_turn_current_player = None

@@ -56,6 +56,7 @@ def parse_announce(data, gs):
     '''
     player_id = data.get('from')
     gs.set_announcing_turn_current_player(player_id=player_id)
+    print "[OTHER] Player id: " + str(player_id) + ' announced that it is : ' + str(data.get('role'))
     return player_id
 
 def parse_action_success(data, gs):
@@ -82,3 +83,5 @@ def parse_announce_resolution(data, gs):
         gs.update_player(id=str(other_player.get('id')), \
         coins=other_player.get('coins'), role=other_player.get('role'), \
         name=other_player.get('name'))
+
+    gs.clear_announcing_turn_current_player()
